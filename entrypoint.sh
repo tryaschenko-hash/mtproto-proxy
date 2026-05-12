@@ -1,13 +1,28 @@
 #!/bin/sh
 set -e
 
+SECRET="${SECRET:-0123456789abcdef0123456789abcdef}"
+TLS_DOMAIN="${TLS_DOMAIN:-www.google.com}"
+TAG="${TAG:-}"
+
 cat > /app/config.py <<EOF
 PORT = ${PORT:-443}
+
 USERS = {
-    "${SECRET:-0123456789abcdef0123456789abcdef}": "user",
+    "tg": "$SECRET",
 }
-TAG = "${TAG:-}"
-TLS_DOMAIN = "${TLS_DOMAIN:-www.google.com}"
+
+MODES = {
+    "classic": False,
+    "secure": False,
+    "tls": True,
+}
+
+TLS_DOMAIN = "$TLS_DOMAIN"
 EOF
 
-exec python3 /app/main.py
+if [ -n "$TAG" ]; then
+    echo "AD_TAG = \"$TAG\"" >> /app/config.py
+fi
+
+exec python3 /app/mtprotoproxy.py
