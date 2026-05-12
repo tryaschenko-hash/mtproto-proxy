@@ -6,7 +6,7 @@ TLS_DOMAIN="${TLS_DOMAIN:-www.google.com}"
 TAG="${TAG:-}"
 
 cat > /app/config.py <<EOF
-PORT = ${PORT:-443}
+PORT = 443
 
 USERS = {
     "tg": "$SECRET",
